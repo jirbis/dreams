@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сны Грамота Судьбы — Запись</title>
+  <meta name="description" content="Запишитесь на консультацию: выберите продукт, дату и время. Профиль по e-mail, автоподстановка данных и сохранение в браузере. Есть полный сброс." />
+  <link rel="icon" href="Pictures/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    section{position:relative}
+    .section-bg{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:1}
+    .nav-link{transition:background-color .2s,color .2s}
+    .nav-link:hover{background-color:rgba(217,70,239,.20);color:#fff}
+    .nav-link.active{background-color:rgba(217,70,239,.28);color:#fff}
+    .slot{cursor:pointer}
+    .slot.selected{outline:2px solid rgba(217,70,239,.7)}
+    .day{cursor:pointer}
+    .day:hover{background:rgba(255,255,255,.06)}
+    .day.selected{background:rgba(217,70,239,.22);outline:2px solid rgba(217,70,239,.5)}
+    .day.out{opacity:.35}
+    .muted{color:#9ca3af}
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900">
+
+<header class="sticky top-0 z-40 backdrop-blur bg-slate-900/60 border-b border-white/10">
+  <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+    <a href="index.html" class="font-semibold">Сны Грамота Судьбы</a>
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      <a href="index.html"  class="nav-link px-3 py-1 rounded">Главная</a>
+      <a href="method.html" class="nav-link px-3 py-1 rounded">Метод</a>
+      <a href="author.html" class="nav-link px-3 py-1 rounded">Автор</a>
+      <a href="contact.html" class="nav-link px-3 py-1 rounded">Общение</a>
+      <a href="cases.html"  class="nav-link px-3 py-1 rounded">Кейсы</a>
+      <a href="booking.html" class="nav-link px-3 py-1 rounded active">Запись</a>
+      <a href="songs.html"   class="nav-link px-3 py-1 rounded">Песни</a>
+      <a href="faq.html"     class="nav-link px-3 py-1 rounded">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<section id="booking" class="relative mx-auto max-w-7xl px-4 py-16">
+  <div class="section-bg" style="background-image:url('phon/calendar_bgr.png');"></div>
+  <h1 class="text-3xl font-bold mb-6">Запись / Заказ</h1>
+
+  <div class="mb-4">
+    <button id="btnResetAll" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded border border-white/10 text-sm">
+      Сбросить все данные
+    </button>
+    <span id="resetHint" class="ml-2 text-xs muted">(очистит сохранённые продукт, описание, дату, время и профиль)</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Левая колонка: продукт + описание -->
+    <div class="glass rounded-2xl p-5 border border-white/10">
+      <h2 class="text-xl font-semibold mb-4">Шаг 1. Продукт</h2>
+      <label class="block text-sm mb-2" for="product">Выберите продукт</label>
+      <select id="product" class="w-full bg-slate-900/60 border border-white/10 rounded px-3 py-2">
+        <option value="Индивидуальная консультация">Индивидуальная консультация</option>
+        <option value="Разбор сна">Разбор сна</option>
+        <option value="Курс: Научиться понимать свои сны">Курс: Научиться понимать свои сны</option>
+        <option value="Подбор песен-сновидений (AI)">Подбор песен-сновидений (AI)</option>
+      </select>
+
+      <h2 class="text-xl font-semibold mt-6 mb-2">Шаг 2. Описание работ</h2>
+      <textarea id="work" rows="6" placeholder="Кратко опишите запрос / желаемый результат…"
+        class="w-full bg-slate-900/60 border border-white/10 rounded px-3 py-2"></textarea>
+    </div>
+
+    <!-- Средняя колонка: календарь -->
+    <div class="glass rounded-2xl p-5 border border-white/10">
+      <h2 class="text-xl font-semibold mb-4">Шаг 3. Дата</h2>
+
+      <div class="flex items-center justify-between mb-3">
+        <button id="prevMonth" class="px-3 py-1 rounded bg-slate-800/70 hover:bg-slate-800">‹</button>
+        <div class="text-lg font-bold" id="monthLabel">Месяц YYYY</div>
+        <button id="nextMonth" class="px-3 py-1 rounded bg-slate-800/70 hover:bg-slate-800">›</button>
+      </div>
+
+      <div class="grid grid-cols-7 text-center text-xs text-slate-300 mb-1">
+        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+      </div>
+      <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
+
+      <div class="mt-3 text-sm">
+        <span class="text-slate-300">Выбрано:</span>
+        <span id="chosenDate" class="font-semibold">—</span>
+      </div>
+    </div>
+
+    <!-- Правая колонка: время + профиль + кнопки -->
+    <div class="glass rounded-2xl p-5 border border-white/10 space-y-6">
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Шаг 4. Время</h2>
+        <div id="slotList" class="grid grid-cols-3 gap-2 text-sm"></div>
+        <div class="mt-4">
+          <label class="block text-sm mb-1">Своё время (чч:мм), если нет в списке</label>
+          <input id="customTime" type="time" class="w-full bg-slate-900/60 border border-white/10 rounded px-3 py-2" />
+        </div>
+      </div>
+
+      <!-- Профиль (вход по email) -->
+      <div class="glass rounded-xl p-4 border border-white/10">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-semibold">Профиль</h3>
+          <span id="loginState" class="text-xs muted">не вошли</span>
+        </div>
+        <label class="block text-sm mb-2">Имя
+          <input id="profName" type="text" class="mt-1 w-full bg-slate-900/60 border border-white/10 rounded px-3 py-2" placeholder="Ваше имя"/>
+        </label>
+        <label class="block text-sm mb-3">E-mail (логин)
+          <input id="profEmail" type="email" class="mt-1 w-full bg-slate-900/60 border border-white/10 rounded px-3 py-2" placeholder="you@example.com"/>
+        </label>
+        <div class="flex gap-2">
+          <button id="btnLoginSave"  class="flex-1 px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-500">Войти/Сохранить</button>
+          <button id="btnLogout"     class="px-3 py-2 rounded bg-slate-800 hover:bg-slate-700">Выйти</button>
+        </div>
+        <p class="mt-2 text-xs muted">Профиль хранится только в вашем браузере.</p>
+      </div>
+
+      <div class="flex gap-2">
+        <button id="btnOrder"   class="flex-1 px-4 py-2 bg-fuchsia-600 hover:bg-fuchsia-700 rounded">Оформить заказ</button>
+        <button id="btnContact" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded">Связаться</button>
+      </div>
+      <p class="text-xs text-slate-300/80">«Оформить заказ» — письмо через mailto с деталями. «Связаться» — модалка Email/WhatsApp/Telegram.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Модалка связи -->
+<div id="contactModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+  <div class="glass w-[90vw] max-w-lg rounded-xl p-6 relative">
+    <button id="closeContactModal" class="absolute top-3 right-3 text-slate-200 text-xl" aria-label="Закрыть">✕</button>
+    <h2 class="text-xl font-bold mb-3">Связаться</h2>
+    <p class="mb-4 text-slate-300">Выберите удобный способ связи.</p>
+
+    <!-- Форма email -->
+    <form id="contactForm" action="mailto:example@dreams.site" method="POST" enctype="text/plain" class="space-y-3">
+      <input type="text" id="userName"  name="Имя"   placeholder="Ваше имя"   required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <input type="email" id="userEmail" name="Email" placeholder="Ваш email" required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <textarea name="Сообщение" id="contactMessage" placeholder="Ваш запрос" required class="w-full px-3 py-2 rounded bg-slate-800"></textarea>
+      <button type="submit" class="w-full px-4 py-2 bg-fuchsia-600 hover:bg-fuchsia-700 rounded">Отправить на email</button>
+    </form>
+
+    <!-- Мессенджеры -->
+    <div class="mt-4 flex gap-3">
+      <a id="btnWhatsApp" href="#" target="_blank" rel="noopener"
+         class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-500 text-center rounded">WhatsApp</a>
+      <a id="btnTelegram" href="#" target="_blank" rel="noopener"
+         class="flex-1 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-center rounded">Telegram</a>
+    </div>
+  </div>
+</div>
+
+<footer class="mx-auto max-w-7xl px-4 py-6 border-t border-white/10 text-sm text-slate-300/90">
+  © <span id="year"></span> Сны Грамота Судьбы
+</footer>
+
+<script>
+  // ===== Конфигурация контактов =====
+  const EMAIL_TO = 'example@dreams.site';
+  const WA_NUMBER = '79991234567';
+  const TG_USER   = 'YourTelegramUsername';
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ===== LocalStorage helpers =====
+  const LS = {
+    product: 'booking_product',
+    work:    'booking_work',
+    date:    'booking_date',
+    time:    'booking_time',
+    name:    'booking_name',
+    email:   'booking_email',
+    profName:'profile_name',
+    profMail:'profile_email'
+  };
+  const save = (k, v) => localStorage.setItem(k, v);
+  const load = (k)    => localStorage.getItem(k) || '';
+  const del  = (k)    => localStorage.removeItem(k);
+
+  // ===== Элементы =====
+  const product    = document.getElementById('product');
+  const work       = document.getElementById('work');
+  const customTime = document.getElementById('customTime');
+  const monthLabel = document.getElementById('monthLabel');
+  const calGrid    = document.getElementById('calendarGrid');
+  const chosenDateEl = document.getElementById('chosenDate');
+  const slotList   = document.getElementById('slotList');
+
+  // Профиль
+  const profName   = document.getElementById('profName');
+  const profEmail  = document.getElementById('profEmail');
+  const btnLogin   = document.getElementById('btnLoginSave');
+  const btnLogout  = document.getElementById('btnLogout');
+  const loginState = document.getElementById('loginState');
+
+  // Модалка контактов
+  const contactModal   = document.getElementById('contactModal');
+  const btnContact     = document.getElementById('btnContact');
+  const closeContact   = document.getElementById('closeContactModal');
+  const contactForm    = document.getElementById('contactForm');
+  const userName       = document.getElementById('userName');
+  const userEmail      = document.getElementById('userEmail');
+  const contactMessage = document.getElementById('contactMessage');
+  const btnWA          = document.getElementById('btnWhatsApp');
+  const btnTG          = document.getElementById('btnTelegram');
+
+  // mailto/мессенджеры
+  contactForm.setAttribute('action', `mailto:${EMAIL_TO}`);
+  btnWA.href = `https://wa.me/${WA_NUMBER}`;
+  btnTG.href = `https://t.me/${TG_USER}`;
+
+  // ===== Восстановление полей =====
+  // Продукт/описание/время
+  const savedProduct = load(LS.product);
+  if (savedProduct) product.value = savedProduct;
+  work.value       = load(LS.work);
+  customTime.value = load(LS.time);
+
+  // Профиль (глобальный)
+  profName.value  = load(LS.profName);
+  profEmail.value = load(LS.profMail);
+  updateLoginState();
+
+  // Контактная форма (если раньше сохраняли через модалку)
+  userName.value  = load(LS.name)  || profName.value;
+  userEmail.value = load(LS.email) || profEmail.value;
+
+  // Дата
+  let view = new Date(); view.setDate(1);
+  let selectedDate = null;
+  const savedDate = load(LS.date);
+  if (savedDate) {
+    chosenDateEl.textContent = savedDate;
+    // Парс для внутреннего selectedDate
+    const [dd, mm, yyyy] = savedDate.split('.'); // формат ru-RU может быть "dd.mm.yyyy"
+    if (yyyy) selectedDate = new Date(Number(yyyy), Number(mm)-1, Number(dd));
+  }
+
+  // ===== Слушатели сохранения =====
+  product.addEventListener('input', () => save(LS.product, product.value));
+  work.addEventListener('input',    () => save(LS.work, work.value));
+  customTime.addEventListener('input', () => save(LS.time, customTime.value));
+
+  // Профиль: вход/сохранение
+  btnLogin.addEventListener('click', () => {
+    const n = profName.value.trim();
+    const m = profEmail.value.trim();
+    if (!m) { alert('Введите e-mail.'); return; }
+    save(LS.profName, n);
+    save(LS.profMail, m);
+    // Подставим в модалку
+    userName.value  = userName.value || n;
+    userEmail.value = userEmail.value || m;
+    save(LS.name,  userName.value);
+    save(LS.email, userEmail.value);
+    updateLoginState();
+    alert('Профиль сохранён в браузере.');
+  });
+
+  // Профиль: выход
+  btnLogout.addEventListener('click', () => {
+    del(LS.profName);
+    del(LS.profMail);
+    profName.value = '';
+    profEmail.value = '';
+    updateLoginState();
+  });
+
+  function updateLoginState(){
+    const m = load(LS.profMail);
+    loginState.textContent = m ? `вошли как ${m}` : 'не вошли';
+  }
+
+  // ===== Календарь =====
+  const RU_MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+  function renderCalendar() {
+    const year = view.getFullYear();
+    const month = view.getMonth();
+    monthLabel.textContent = RU_MONTHS[month] + ' ' + year;
+
+    calGrid.innerHTML = '';
+
+    const firstDay = new Date(year, month, 1);
+    const startWeekday = (firstDay.getDay() + 6) % 7; // Пн=0 ... Вс=6
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const prevDays = startWeekday;
+    const totalCells = Math.ceil((prevDays + daysInMonth) / 7) * 7;
+
+    for (let i = 0; i < totalCells; i++) {
+      const cell = document.createElement('button');
+      cell.type='button';
+      cell.className = 'day text-center py-2 rounded border border-white/10 bg-slate-900/40';
+
+      const dayNum = i - prevDays + 1;
+      let cellDate;
+
+      if (i < prevDays) {
+        const d = new Date(year, month, 0 - (prevDays - i - 1));
+        cell.textContent = d.getDate();
+        cell.classList.add('out');
+        cellDate = d;
+      } else if (dayNum > daysInMonth) {
+        const d = new Date(year, month + 1, dayNum - daysInMonth);
+        cell.textContent = d.getDate();
+        cell.classList.add('out');
+        cellDate = d;
+      } else {
+        const d = new Date(year, month, dayNum);
+        cell.textContent = dayNum;
+        cellDate = d;
+      }
+
+      // выбранная дата подсветка
+      cell.addEventListener('click', () => {
+        selectedDate = new Date(cellDate.getFullYear(), cellDate.getMonth(), cellDate.getDate());
+        calGrid.querySelectorAll('.day').forEach(el => el.classList.remove('selected'));
+        cell.classList.add('selected');
+        const dateStr = selectedDate.toLocaleDateString('ru-RU');
+        chosenDateEl.textContent = dateStr;
+        save(LS.date, dateStr);
+      });
+
+      calGrid.appendChild(cell);
+    }
+  }
+
+  document.getElementById('prevMonth').addEventListener('click', () => { view.setMonth(view.getMonth()-1); renderCalendar(); });
+  document.getElementById('nextMonth').addEventListener('click', () => { view.setMonth(view.getMonth()+1); renderCalendar(); });
+
+  renderCalendar();
+
+  // ===== Слоты времени =====
+  let selectedTime = customTime.value || '';
+  function renderSlots() {
+    slotList.innerHTML = '';
+    const slots = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
+    slots.forEach(t => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'slot px-3 py-2 rounded bg-slate-900/60 border border-white/10 hover:bg-slate-800';
+      b.textContent = t;
+      if (t === selectedTime) b.classList.add('selected');
+      b.addEventListener('click', () => {
+        selectedTime = t;
+        customTime.value = t;
+        save(LS.time, t);
+        slotList.querySelectorAll('.slot').forEach(x => x.classList.remove('selected'));
+        b.classList.add('selected');
+      });
+      slotList.appendChild(b);
+    });
+  }
+  renderSlots();
+
+  customTime.addEventListener('input', () => {
+    selectedTime = customTime.value || '';
+    save(LS.time, selectedTime);
+    slotList.querySelectorAll('.slot').forEach(x => x.classList.toggle('selected', x.textContent === selectedTime));
+  });
+
+  // ===== Оформление заказа =====
+  const btnOrder = document.getElementById('btnOrder');
+  btnOrder.addEventListener('click', () => {
+    if (!selectedDate && !load(LS.date)) {
+      alert('Пожалуйста, выберите дату.');
+      return;
+    }
+    const dateStr = load(LS.date) || selectedDate.toLocaleDateString('ru-RU');
+    const time = load(LS.time) || selectedTime || customTime.value;
+    if (!time) {
+      alert('Пожалуйста, выберите время или введите своё.');
+      return;
+    }
+    // Сохраним профиль из модалки (если заполнен)
+    save(LS.name,  userName.value.trim());
+    save(LS.email, userEmail.value.trim());
+
+    const subj = `Заказ: ${product.value} — ${dateStr} ${time}`;
+    const body =
+`Имя: ${load(LS.name) || profName.value || '(не указано)'}
+Email: ${load(LS.email) || profEmail.value || '(не указан)'}
+Продукт: ${product.value}
+Дата и время: ${dateStr} ${time}
+Описание работ: ${work.value.trim() || '(не заполнено)'}
+-------------------------
+Пожалуйста, подтвердите запись или предложите альтернативы.`.replace(/\n/g, '%0D%0A');
+
+    const mailto = `mailto:${encodeURIComponent(EMAIL_TO)}?subject=${encodeURIComponent(subj)}&body=${body}`;
+    window.location.href = mailto;
+  });
+
+  // ===== Модалка связи =====
+  document.getElementById('btnContact').addEventListener('click', () => {
+    // подставим данные профиля/сохранённые
+    userName.value  = load(LS.name)  || profName.value;
+    userEmail.value = load(LS.email) || profEmail.value;
+    contactMessage.value = `Здравствуйте! Хочу уточнить по записи.\n\nПродукт: ${product.value}\nДата/время: ${(load(LS.date)||'—')} ${(load(LS.time)||'—')}\nОписание работ: ${work.value.trim() || '(не заполнено)'}`;
+    contactModal.classList.remove('hidden');
+    contactModal.classList.add('flex');
+  });
+  document.getElementById('closeContactModal').addEventListener('click', () => {
+    contactModal.classList.add('hidden');
+    contactModal.classList.remove('flex');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !contactModal.classList.contains('hidden')) {
+      contactModal.classList.add('hidden');
+      contactModal.classList.remove('flex');
+    }
+  });
+
+  // ===== Сброс всех данных =====
+  document.getElementById('btnResetAll').addEventListener('click', () => {
+    if (!confirm('Сбросить все сохранённые данные и очистить форму?')) return;
+
+    // Очистить LS
+    [LS.product, LS.work, LS.date, LS.time, LS.name, LS.email, LS.profName, LS.profMail].forEach(del);
+
+    // Очистить поля/состояния
+    product.selectedIndex = 0;
+    work.value = '';
+    chosenDateEl.textContent = '—';
+    selectedDate = null;
+    renderCalendar();
+
+    customTime.value = '';
+    selectedTime = '';
+    renderSlots();
+
+    profName.value = '';
+    profEmail.value = '';
+    updateLoginState();
+
+    userName.value = '';
+    userEmail.value = '';
+    contactMessage.value = '';
+
+    // Закрыть модалку, если открыта
+    contactModal.classList.add('hidden');
+    contactModal.classList.remove('flex');
+  });
+
+  // Инициал: если есть сохранённое время — подсветим слот
+  if (load(LS.time)) {
+    selectedTime = load(LS.time);
+    customTime.value = selectedTime;
+    slotList.querySelectorAll('.slot').forEach(x => x.classList.toggle('selected', x.textContent === selectedTime));
+  }
+</script>
+</body>
+</html>

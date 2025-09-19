@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сны Грамота Судьбы — Метод</title>
+  <meta name="description" content="Сочетание современного понимания психики и мягких когнитивных техник. Видео о методе — локально из каталога video." />
+  <link rel="icon" href="Pictures/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Сны Грамота Судьбы" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="Метод — Сны Грамота Судьбы" />
+  <meta property="og:description" content="Видео о методе: как понимать свои сны и применять их в жизни." />
+  <meta property="og:url" content="method.html" />
+  <meta property="og:image" content="Pictures/og-method.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    section{position:relative}
+    .section-bg{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;background-repeat:no-repeat;transition:opacity .2s ease}
+    .nav-link{transition:background-color .2s,color .2s}
+    .nav-link:hover{background-color:rgba(217,70,239,.20);color:#fff}
+    .nav-link.active{background-color:rgba(217,70,239,.28);color:#fff}
+    .video-item{position:relative;overflow:hidden}
+    .video-item .bg-img{position:absolute;inset:0;background-position:center;background-size:cover;opacity:.28}
+    .video-item .bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25))}
+    .video-item .content{position:relative;z-index:1}
+    .cta-title{cursor:pointer}
+    .cta-title:hover{color:rgb(232 121 249)} /* hover:text-fuchsia-400 */
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900">
+
+  <!-- Шапка -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-slate-900/60 border-b border-white/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="font-semibold">Сны Грамота Судьбы</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="index.html" class="nav-link px-3 py-1 rounded">Главная</a>
+        <a href="method.html" class="nav-link px-3 py-1 rounded active">Метод</a>
+        <a href="author.html" class="nav-link px-3 py-1 rounded">Автор</a>
+        <a href="contact.html" class="nav-link px-3 py-1 rounded">Общение</a>
+        <a href="cases.html" class="nav-link px-3 py-1 rounded">Кейсы</a>
+        <a href="booking.html" class="nav-link px-3 py-1 rounded">Запись</a>
+        <a href="songs.html" class="nav-link px-3 py-1 rounded">Песни</a>
+        <a href="faq.html" class="nav-link px-3 py-1 rounded">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Раздел «Метод» -->
+  <section id="method" class="relative mx-auto max-w-7xl px-4 py-16 text-center">
+    <div class="section-bg" id="bg-method"
+         style="background-image:url('phon/method_bg.png'); background-size:cover; opacity:1;"></div>
+
+    <h1 class="text-3xl font-bold">Метод</h1>
+    <p class="mt-2">Сочетает современное понимание психики и мягкие когнитивные техники. Практика, адаптированная для ежедневного применения.</p>
+
+    <!-- Кликабельный вызов (запустит 1-е видео из списка METHOD_VIDEOS) -->
+    <h2 id="methodCta" class="cta-title mt-6 text-2xl md:text-3xl font-extrabold">
+      Уникальный Метод Работы со Сновидениями
+    </h2>
+    <p class="text-sm text-slate-300">Нажми — откроется плеер и запустится первый ролик из раздела «Видео о методе» ниже.</p>
+
+    <!-- Список видео о методе -->
+    <div class="mt-8">
+      <h3 class="text-xl font-semibold mb-3">Видео о методе</h3>
+      <div id="methodVideos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- Модалка плеера -->
+  <div id="methodModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center">
+    <div class="relative w-[90vw] max-w-4xl">
+      <video id="methodPlayer" controls playsinline class="w-full rounded-xl border border-white/20"></video>
+      <div class="absolute -top-12 left-0 right-0 flex items-center justify-between">
+        <span id="nowPlayingMethod" class="text-slate-200 text-sm"></span>
+        <button id="closeMethod" class="text-white text-xl bg-black/50 hover:bg-black/70 px-3 py-1 rounded" aria-label="Закрыть видео">Вернуться ✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Подвал -->
+  <footer class="mx-auto max-w-7xl px-4 py-6 border-t border-white/10 text-sm text-slate-300/90">
+    © <span id="year"></span> Сны Грамота Судьбы
+  </footer>
+
+  <script>
+    // Год
+    (function(){ var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+
+    // ===== РЕДАКТИРУЕМЫЙ СПИСОК ВИДЕО ДЛЯ «МЕТОД» =====
+    // Положи файлы в /video, обложки (опционально) в /Pictures
+    var METHOD_VIDEOS = [{ title:'Уникальный Метод Работы со Сновидениями', file:'Уникальный Метод Работы со Сновидениями.mp4', cover:'Pictures/cover-hero-metod.jpg', cat:'special'},
+						 { title:'ТВОИ СНЫ ОПРЕДЕЛЯЮТ ТВОЮ СУДЬБУ', file:'hero.mp4', cover:'Pictures/cover-hero.jpg', cat:'special' }
+      // примеры:
+      // { title:'Как работает метод', file:'Что такое сновидение 720.mp4', cover:'Pictures/cover-chto-takoe.jpg' },
+      // { title:'Практика: с чего начать', file:'Учиться понимать свои сны 720.mp4', cover:'Pictures/cover-uchitsya-ponyimat.jpg' },
+    ];
+
+    function vpath(name){ return 'video/' + encodeURI(name); }
+    function esc(s){ return (s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
+
+    // Рендер карточек
+    (function renderMethodVideos(){
+      var box = document.getElementById('methodVideos'); if(!box) return;
+      if(!METHOD_VIDEOS.length){
+        box.innerHTML = '<div class="text-slate-400">Пока нет видео. Добавьте элементы в массив METHOD_VIDEOS внутри method.html.</div>';
+        return;
+      }
+      box.innerHTML = METHOD_VIDEOS.map(function(v){
+        var cover = v.cover ? 'style="background-image:url('+esc(v.cover)+')"':'';
+        return (
+          '<div class="video-item glass rounded-xl p-4 border border-white/10 flex flex-col gap-3">'+
+            (v.cover ? '<div class="bg-img" '+cover+'></div><div class="bg-overlay"></div>' : '')+
+            '<div class="content">'+
+              '<div class="font-semibold">'+esc(v.title)+'</div>'+
+              '<div class="mt-2 flex gap-2 flex-wrap">'+
+                '<button class="play-method px-3 py-1 rounded bg-fuchsia-600 hover:bg-fuchsia-500 text-sm" '+
+                        'data-file="'+esc(v.file)+'" data-title="'+esc(v.title)+'">Воспроизвести</button>'+
+                '<a class="px-3 py-1 rounded bg-slate-800/60 hover:bg-slate-800 text-sm" href="'+vpath(v.file)+'" download>Скачать</a>'+
+              '</div>'+
+            '</div>'+
+          '</div>'
+        );
+      }).join('');
+    })();
+
+    // Модалка «Метод»
+    (function initMethodPlayer(){
+      var modal  = document.getElementById('methodModal');
+      var player = document.getElementById('methodPlayer');
+      var now    = document.getElementById('nowPlayingMethod');
+      var close  = document.getElementById('closeMethod');
+      var list   = document.getElementById('methodVideos');
+      function open(file, title){
+        player.src = vpath(file);
+        if(now) now.textContent = 'Сейчас играет: ' + title;
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+        player.play().catch(function(){});
+      }
+      function closeModal(){
+        player.pause(); player.currentTime=0; player.src='';
+        modal.classList.remove('flex'); modal.classList.add('hidden');
+        if(now) now.textContent='';
+      }
+      // запуск из карточек
+      list.addEventListener('click', function(e){
+        var btn = e.target.closest && e.target.closest('.play-method'); if(!btn) return;
+        open(btn.getAttribute('data-file')||'', btn.getAttribute('data-title')||'');
+      });
+      // клик по «ТВОИ СНЫ ОПРЕДЕЛЯЮТ ТВОЮ СУДЬБУ» — запускает первое видео массива
+      var cta = document.getElementById('methodCta');
+      if(cta){
+        cta.addEventListener('click', function(){
+          if(!METHOD_VIDEOS.length){ alert('Добавьте хотя бы один ролик в METHOD_VIDEOS.'); return; }
+          open(METHOD_VIDEOS[0].file, METHOD_VIDEOS[0].title);
+        });
+      }
+      if(close)  close.addEventListener('click', closeModal);
+      if(player) player.addEventListener('ended', closeModal);
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+    })();
+  </script>
+<div data-include="video-modal-method.html"></div>
+<script src="app.js"></script>
+</body>
+</html>

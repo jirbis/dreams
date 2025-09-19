@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сны Грамота Судьбы — Автор</title>
+  <meta name="description" content="Людмила Цицер — автор метода «Научитесь понимать свои сны». Фото, видео и история подхода." />
+  <link rel="icon" href="Pictures/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Сны Грамота Судьбы" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="Автор — Сны Грамота Судьбы" />
+  <meta property="og:description" content="Видео и фото об авторе метода понимания сновидений." />
+  <meta property="og:url" content="author.html" />
+  <meta property="og:image" content="Pictures/og-author.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    section{position:relative}
+    .section-bg{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;background-repeat:no-repeat;transition:opacity .2s ease}
+    .nav-link{transition:background-color .2s,color .2s}
+    .nav-link:hover{background-color:rgba(217,70,239,.20);color:#fff}
+    .nav-link.active{background-color:rgba(217,70,239,.28);color:#fff}
+
+    /* сетка фото автора */
+    .author-grid img{aspect-ratio:4/5;object-fit:cover}
+
+    /* карточки видео */
+    .video-item{position:relative;overflow:hidden}
+    .video-item .bg-img{position:absolute;inset:0;background-position:center;background-size:cover;opacity:.28}
+    .video-item .bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25))}
+    .video-item .content{position:relative;z-index:1}
+
+    /* CTA */
+    .cta-title{cursor:pointer}
+    .cta-title:hover{color:rgb(232 121 249)} /* hover:text-fuchsia-400 */
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900">
+
+  <!-- Шапка -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-slate-900/60 border-b border-white/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="font-semibold">Сны Грамота Судьбы</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="index.html" class="nav-link px-3 py-1 rounded">Главная</a>
+        <a href="method.html" class="nav-link px-3 py-1 rounded">Метод</a>
+        <a href="author.html" class="nav-link px-3 py-1 rounded active">Автор</a>
+        <a href="contact.html" class="nav-link px-3 py-1 rounded">Общение</a>
+        <a href="cases.html" class="nav-link px-3 py-1 rounded">Кейсы</a>
+        <a href="booking.html" class="nav-link px-3 py-1 rounded">Запись</a>
+        <a href="songs.html" class="nav-link px-3 py-1 rounded">Песни</a>
+        <a href="faq.html" class="nav-link px-3 py-1 rounded">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Раздел «Автор» -->
+  <section id="author" class="relative mx-auto max-w-7xl px-4 py-16 text-center">
+    <!-- фон раздела -->
+    <div class="section-bg" id="bg-author"
+         style="background-image:url('phon/author_bg.png'); background-size:cover; opacity:1;"></div>
+
+    <h1 class="text-3xl font-bold">Об авторе</h1>
+    <p class="mt-2">Людмила Цицер — автор метода «Научитесь понимать свои сны». Исследует практики осмысленного отношения к сновидениям и их применению в личной жизни.</p>
+
+    <!-- кликабельный вызов: запускает 1-й ролик из списка ниже -->
+    <h2 id="authorCta" class="cta-title mt-6 text-2xl md:text-3xl font-extrabold">
+      Уникальный Метод Работы со Сновидениями
+    </h2>
+    <p class="text-sm text-slate-300">Нажми — откроется плеер и запустится первый ролик из раздела «Видео об авторе».</p>
+
+    <!-- фото автора (3 изображения) -->
+    <div class="author-grid grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+      <img src="Pictures/Авторское свиде 1.jpg" alt="Фото автора 1" class="rounded-xl border border-white/10 w-full" />
+    <img src="Pictures/author.jpg" alt="Фото автора 2" class="rounded-xl border border-white/10 w-full" />
+    <img src="Pictures/акред.jpg" alt="Фото автора 3" class="rounded-xl border border-white/10 w-full" />
+    </div>
+
+    <!-- видео об авторе -->
+    <div class="mt-10">
+      <h3 class="text-xl font-semibold mb-3">Видео об авторе</h3>
+      <div id="authorVideos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- Модальное окно плеера -->
+  <div id="authorModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center">
+    <div class="relative w-[90vw] max-w-4xl">
+      <video id="authorPlayer" controls playsinline class="w-full rounded-xl border border-white/20"></video>
+      <div class="absolute -top-12 left-0 right-0 flex items-center justify-between">
+        <span id="nowPlayingAuthor" class="text-slate-200 text-sm"></span>
+        <button id="closeAuthor" class="text-white text-xl bg-black/50 hover:bg-black/70 px-3 py-1 rounded" aria-label="Закрыть видео">Вернуться ✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Подвал -->
+  <footer class="mx-auto max-w-7xl px-4 py-6 border-t border-white/10 text-sm text-slate-300/90">
+    © <span id="year"></span> Сны Грамота Судьбы
+  </footer>
+
+  <script>
+    // год в подвале
+    (function(){ var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+
+    // ===== РЕДАКТИРУЕМЫЙ СПИСОК ВИДЕО ДЛЯ СТРАНИЦЫ «АВТОР» =====
+    // Файлы клади в /video, обложки (опционально) в /Pictures
+    var AUTHOR_VIDEOS = [{ title:'Уникальный Метод Работы со Сновидениями', file:'Уникальный Метод Работы со Сновидениями.mp4', cover:'Pictures/cover-hero.jpg', cat:'special'}
+      // примеры — просто замени/добавь свои:
+      // { title:'Интервью с автором', file:'hero.mp4', cover:'Pictures/cover-hero.jpg' },
+      // { title:'Идея метода: как всё началось', file:'Через сны 720.mp4', cover:'Pictures/cover-cherez-sny.jpg' },
+      // { title:'Путь и опыт', file:'Что такое сновидение 720.mp4', cover:'Pictures/cover-chto-takoe.jpg' },
+    ];
+
+    function vpath(name){ return 'video/' + encodeURI(name); }
+    function esc(s){ return (s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
+
+    // рендер карточек видео
+    (function renderAuthorVideos(){
+      var box = document.getElementById('authorVideos'); if(!box) return;
+      if(!AUTHOR_VIDEOS.length){
+        box.innerHTML = '<div class="text-slate-400">Пока нет видео. Добавьте элементы в массив AUTHOR_VIDEOS внутри author.html.</div>';
+        return;
+      }
+      box.innerHTML = AUTHOR_VIDEOS.map(function(v){
+        var cover = v.cover ? 'style="background-image:url('+esc(v.cover)+')"':'';
+        return (
+          '<div class="video-item glass rounded-xl p-4 border border-white/10 flex flex-col gap-3">'+
+            (v.cover ? '<div class="bg-img" '+cover+'></div><div class="bg-overlay"></div>' : '')+
+            '<div class="content">'+
+              '<div class="font-semibold">'+esc(v.title)+'</div>'+
+              '<div class="mt-2 flex gap-2 flex-wrap">'+
+                '<button class="play-author px-3 py-1 rounded bg-fuchsia-600 hover:bg-fuchsia-500 text-sm" '+
+                        'data-file="'+esc(v.file)+'" data-title="'+esc(v.title)+'">Воспроизвести</button>'+
+                '<a class="px-3 py-1 rounded bg-slate-800/60 hover:bg-slate-800 text-sm" href="'+vpath(v.file)+'" download>Скачать</a>'+
+              '</div>'+
+            '</div>'+
+          '</div>'
+        );
+      }).join('');
+    })();
+
+    // модальный плеер для «Автор»
+    (function initAuthorPlayer(){
+      var modal  = document.getElementById('authorModal');
+      var player = document.getElementById('authorPlayer');
+      var now    = document.getElementById('nowPlayingAuthor');
+      var close  = document.getElementById('closeAuthor');
+      var list   = document.getElementById('authorVideos');
+
+      function open(file, title){
+        player.src = vpath(file);
+        if(now) now.textContent = 'Сейчас играет: ' + title;
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+        player.play().catch(function(){});
+      }
+      function closeModal(){
+        player.pause(); player.currentTime=0; player.src='';
+        modal.classList.remove('flex'); modal.classList.add('hidden');
+        if(now) now.textContent='';
+      }
+
+      // запуск из карточек
+      list.addEventListener('click', function(e){
+        var btn = e.target.closest && e.target.closest('.play-author'); if(!btn) return;
+        open(btn.getAttribute('data-file')||'', btn.getAttribute('data-title')||'');
+      });
+
+      // клик по CTA — запускаем первый ролик из списка
+      var cta = document.getElementById('authorCta');
+      if(cta){
+        cta.addEventListener('click', function(){
+          if(!AUTHOR_VIDEOS.length){ alert('Добавьте хотя бы один ролик в AUTHOR_VIDEOS.'); return; }
+          open(AUTHOR_VIDEOS[0].file, AUTHOR_VIDEOS[0].title);
+        });
+      }
+
+      if(close)  close.addEventListener('click', closeModal);
+      if(player) player.addEventListener('ended', closeModal);
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!-- contact-modal.html -->
+<div id="contactModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+  <div class="glass w-[90vw] max-w-lg rounded-xl p-6 relative border border-white/10">
+    <button id="closeContactModal" class="absolute top-3 right-3 text-slate-200 text-xl" aria-label="Закрыть">✕</button>
+    <h2 class="text-xl font-bold mb-3">Связаться</h2>
+    <p class="mb-4 text-slate-300">Выберите удобный способ связи.</p>
+
+    <!-- Форма email -->
+    <form id="contactForm" action="#" method="POST" enctype="text/plain" class="space-y-3">
+      <input type="text"  id="userName"  name="Имя"   placeholder="Ваше имя"   required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <input type="email" id="userEmail" name="Email" placeholder="Ваш email" required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <textarea name="Сообщение" id="contactMessage" placeholder="Ваш запрос" required class="w-full px-3 py-2 rounded bg-slate-800"></textarea>
+      <button type="submit" class="w-full px-4 py-2 bg-fuchsia-600 hover:bg-fuchsia-700 rounded">Отправить на email</button>
+    </form>
+
+    <!-- Мессенджеры -->
+    <div class="mt-4 flex gap-3">
+      <a id="btnWhatsApp" href="#" target="_blank" rel="noopener"
+         class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-500 text-center rounded">WhatsApp</a>
+      <a id="btnTelegram" href="#" target="_blank" rel="noopener"
+         class="flex-1 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-center rounded">Telegram</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сны Грамота Судьбы — FAQ</title>
+  <meta name="description" content="Частые вопросы по методу понимания снов и ответы. Быстрая связь с автором: email, WhatsApp или Telegram." />
+  <link rel="icon" href="Pictures/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Сны Грамота Судьбы" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="FAQ — Сны Грамота Судьбы" />
+  <meta property="og:description" content="Частые вопросы по методу и быстрые способы связи с автором." />
+  <meta property="og:url" content="faq.html" />
+  <meta property="og:image" content="Pictures/og-faq.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    section{position:relative}
+    .section-bg{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:1}
+    .nav-link{transition:background-color .2s,color .2s}
+    .nav-link:hover{background-color:rgba(217,70,239,.20);color:#fff}
+    .nav-link.active{background-color:rgba(217,70,239,.28);color:#fff}
+
+    .faq-item{cursor:pointer}
+    .faq-item:hover{text-decoration:underline;color:rgb(232 121 249)}
+    .faq-answer{max-height:0;overflow:hidden;transition:max-height .3s ease;padding-left:1rem;color:#cbd5e1}
+    .ring-choice{box-shadow:0 0 0 3px rgba(217,70,239,.6) inset}
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900">
+
+<!-- Шапка -->
+<header class="sticky top-0 z-40 backdrop-blur bg-slate-900/60 border-b border-white/10">
+  <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+    <a href="index.html" class="font-semibold">Сны Грамота Судьбы</a>
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      <a href="index.html"  class="nav-link px-3 py-1 rounded">Главная</a>
+      <a href="method.html" class="nav-link px-3 py-1 rounded">Метод</a>
+      <a href="author.html" class="nav-link px-3 py-1 rounded">Автор</a>
+      <a href="contact.html" class="nav-link px-3 py-1 rounded">Общение</a>
+      <a href="cases.html"  class="nav-link px-3 py-1 rounded">Кейсы</a>
+      <a href="booking.html" class="nav-link px-3 py-1 rounded">Запись</a>
+      <a href="songs.html"   class="nav-link px-3 py-1 rounded">Песни</a>
+      <a href="faq.html"     class="nav-link px-3 py-1 rounded active">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<!-- FAQ -->
+<section id="faq" class="relative mx-auto max-w-7xl px-4 py-16 text-center">
+  <div class="section-bg" style="background-image:url('phon/questions_bg.png');"></div>
+
+  <h1 class="text-3xl font-bold mb-6">Частые вопросы</h1>
+  <ul class="space-y-1 text-lg" id="faqList">
+    <li>
+      <div class="faq-item" role="button" aria-expanded="false" aria-controls="ans1">Подходит ли метод, если я редко запоминаю сны?</div>
+      <div class="faq-answer" id="ans1">Да. Начинаем с простого: фиксируем небольшие образы и ощущения, постепенно память тренируется.</div>
+    </li>
+    <li>
+      <div class="faq-item" role="button" aria-expanded="false" aria-controls="ans2">Сколько длится консультация?</div>
+      <div class="faq-answer" id="ans2">Обычно 60 минут. В отдельных случаях можем продлить.</div>
+    </li>
+    <li>
+      <div class="faq-item" role="button" aria-expanded="false" aria-controls="ans3">Что подготовить к встрече?</div>
+      <div class="faq-answer" id="ans3">Записи ваших снов (если есть), спокойное место и открытость к диалогу.</div>
+    </li>
+  </ul>
+</section>
+
+<!-- Модалка «Связаться» -->
+<div id="contactModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+  <div class="glass w-[90vw] max-w-lg rounded-xl p-6 relative">
+    <button id="closeContactModal" class="absolute top-3 right-3 text-slate-200 text-xl" aria-label="Закрыть">✕</button>
+    <h2 class="text-xl font-bold mb-3">Связаться</h2>
+    <p id="selectedChannel" class="mb-4 text-slate-300"></p>
+
+    <!-- Форма email -->
+    <form id="contactForm" action="mailto:example@dreams.site" method="POST" enctype="text/plain" class="space-y-3">
+      <input type="text" name="Имя" placeholder="Ваше имя" required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <input type="email" name="Email" placeholder="Ваш email" required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <textarea name="Сообщение" id="contactMessage" placeholder="Ваш запрос" required class="w-full px-3 py-2 rounded bg-slate-800"></textarea>
+      <button type="submit" class="w-full px-4 py-2 bg-fuchsia-600 hover:bg-fuchsia-700 rounded">Отправить на email</button>
+    </form>
+
+    <!-- Мессенджеры -->
+    <div class="mt-4 flex gap-3">
+      <a id="btnWhatsApp" href="https://wa.me/79991234567" target="_blank" rel="noopener"
+         class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-500 text-center rounded">Написать в WhatsApp</a>
+      <a id="btnTelegram" href="https://t.me/YourTelegramUsername" target="_blank" rel="noopener"
+         class="flex-1 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-center rounded">Написать в Telegram</a>
+    </div>
+  </div>
+</div>
+
+<!-- Подвал -->
+<footer class="mx-auto max-w-7xl px-4 py-6 border-t border-white/10 text-sm text-slate-300/90">
+  © <span id="year"></span> Сны Грамота Судьбы
+</footer>
+
+<script>
+  // Год в футере
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Контакты (замените на свои)
+  const EMAIL_TO = 'example@dreams.site';
+  const WA_NUMBER = '79991234567';
+  const TG_USER   = 'YourTelegramUsername';
+
+  // Модалка элементы
+  const modal     = document.getElementById('contactModal');
+  const closeBtn  = document.getElementById('closeContactModal');
+  const selected  = document.getElementById('selectedChannel');
+  const form      = document.getElementById('contactForm');
+  const msg       = document.getElementById('contactMessage');
+  const btnWA     = document.getElementById('btnWhatsApp');
+  const btnTG     = document.getElementById('btnTelegram');
+
+  // Применяем контакты
+  form.setAttribute('action', `mailto:${EMAIL_TO}`);
+  btnWA.href = `https://wa.me/${WA_NUMBER}`;
+  btnTG.href = `https://t.me/${TG_USER}`;
+
+  // Аккордеон + открытие модалки
+  const items   = Array.from(document.querySelectorAll('.faq-item'));
+  const answers = Array.from(document.querySelectorAll('.faq-answer'));
+
+  function closeAllExcept(index) {
+    items.forEach((it, i) => {
+      if (i !== index) {
+        it.classList.remove('open');
+        it.setAttribute('aria-expanded', 'false');
+        const ans = answers[i];
+        ans.style.maxHeight = '0px';
+      }
+    });
+  }
+
+  items.forEach((item, index) => {
+    const ans = answers[index];
+    item.addEventListener('click', () => {
+      const willOpen = !item.classList.contains('open');
+
+      // Аккордеон: закрыть остальные
+      closeAllExcept(index);
+
+      // Текущий: открыть/закрыть
+      if (willOpen) {
+        item.classList.add('open');
+        item.setAttribute('aria-expanded', 'true');
+        ans.style.maxHeight = ans.scrollHeight + 'px';
+      } else {
+        item.classList.remove('open');
+        item.setAttribute('aria-expanded', 'false');
+        ans.style.maxHeight = '0px';
+      }
+
+      // Модалка общения — всегда при клике
+      const subj = item.textContent.trim();
+      selected.textContent = `Вы выбрали вопрос: "${subj}"`;
+      form.setAttribute('action', `mailto:${EMAIL_TO}?subject=${encodeURIComponent(subj)}`);
+      msg.value = `Тема: ${subj}\n\nЗдравствуйте! Хочу уточнить детали.`;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+
+    // Инициал: гарантированно свёрнуто
+    ans.style.maxHeight = '0px';
+  });
+
+  // Закрытие модалки
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  });
+</script>
+</body>
+</html>

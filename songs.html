@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сны Грамота Судьбы — Песни</title>
+  <meta name="description" content="Песни о снах с локального видео: выбор по смысловым блокам, модальный плеер и полупрозрачные обложки." />
+  <link rel="icon" href="Pictures/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Сны Грамота Судьбы" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="Песни — Сны Грамота Судьбы" />
+  <meta property="og:description" content="Выбирайте песни по блокам: Введение, Практика, Тёмные, Позитивные, Спец-версии." />
+  <meta property="og:url" content="songs.html" />
+  <meta property="og:image" content="Pictures/og-songs.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    section{position:relative}
+    .section-bg{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;background-repeat:no-repeat;transition:opacity .2s ease}
+    .nav-link{transition:background-color .2s,color .2s}
+    .nav-link:hover{background-color:rgba(217,70,239,.20);color:#fff}
+    .nav-link.active{background-color:rgba(217,70,239,.28);color:#fff}
+
+    /* карточки песен */
+    .song-item{position:relative;overflow:hidden}
+    .song-item .bg-img{position:absolute;inset:0;background-position:center;background-size:cover;opacity:.35}
+    .song-item .bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.35))}
+    .song-item .content{position:relative;z-index:1}
+    .song-item:hover{background:rgba(255,255,255,.05)}
+
+    /* табы категорий */
+    .tab{border:1px solid rgba(255,255,255,.15);padding:.4rem .7rem;border-radius:.6rem;font-size:.875rem;background:rgba(2,6,23,.55)}
+    .tab:hover{background:rgba(217,70,239,.18)}
+    .tab.active{background:rgba(217,70,239,.28);border-color:rgba(217,70,239,.5)}
+    .badge{font-size:.7rem;padding:.1rem .4rem;border-radius:.5rem;background:rgba(255,255,255,.12)}
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900">
+
+  <!-- Шапка -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-slate-900/60 border-b border-white/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="font-semibold">Сны Грамота Судьбы</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="index.html" class="nav-link px-3 py-1 rounded">Главная</a>
+        <a href="method.html" class="nav-link px-3 py-1 rounded">Метод</a>
+        <a href="author.html" class="nav-link px-3 py-1 rounded">Автор</a>
+        <a href="contact.html" class="nav-link px-3 py-1 rounded">Общение</a>
+        <a href="cases.html" class="nav-link px-3 py-1 rounded">Кейсы</a>
+        <a href="booking.html" class="nav-link px-3 py-1 rounded">Запись</a>
+        <a href="songs.html" class="nav-link px-3 py-1 rounded active">Песни</a>
+        <a href="faq.html" class="nav-link px-3 py-1 rounded">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Раздел Песни -->
+  <section id="songs" class="relative mx-auto max-w-7xl px-4 py-16">
+    <!-- Фон раздела -->
+    <div class="section-bg" id="bg-songs"
+         style="background-image:url('phon/songs_bg.png'); background-size:cover; opacity:1;"></div>
+
+    <h1 class="text-3xl font-bold text-center">Песни о снах от Искусственного Интеллекта</h1>
+    <p class="mt-2 text-center text-slate-300">Выберите блок вверху — список отфильтруется. Клик по песне откроет модальный плеер. По окончании ролика — возврат.</p>
+
+    <!-- Меню блоков (табы) -->
+    <div id="tabs" class="mt-6 flex flex-wrap justify-center gap-2">
+      <!-- Рендерится скриптом -->
+    </div>
+
+    <!-- Список песен -->
+    <div id="songsList" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </section>
+
+  <!-- Модальное окно плеера -->
+  <div id="songModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center">
+    <div class="relative w-[90vw] max-w-4xl">
+      <video id="songPlayer" controls playsinline class="w-full rounded-xl border border-white/20"></video>
+      <div class="absolute -top-12 left-0 right-0 flex items-center justify-between">
+        <span id="nowPlaying" class="text-slate-200 text-sm"></span>
+        <button id="closeSong" class="text-white text-xl bg-black/50 hover:bg-black/70 px-3 py-1 rounded" aria-label="Закрыть видео">Вернуться ✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Подвал -->
+  <footer class="mx-auto max-w-7xl px-4 py-6 border-t border-white/10 text-sm text-slate-300/90">
+    © <span id="year"></span> Сны Грамота Судьбы
+  </footer>
+
+  <!-- Скрипт страницы -->
+  <script>
+    // ===== год в подвале
+    (function(){ var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+
+    // ===== категории (табы)
+    var CATS = [
+      { key:'all',     title:'Все' },
+      { key:'intro',   title:'Введение' },
+      { key:'practice',title:'Практика' },
+      { key:'temnye',  title:'Тёмные' },
+      { key:'positive',title:'Позитивные' },
+      { key:'special', title:'Спец-версии' }
+    ];
+
+    // ===== данные песен: файл из video/, обложка из Pictures/ (cover)
+    var SONGS = [
+      // Введение
+      { title:'Что такое сновидение', file:'Что такое сновидение 720.mp4', cover:'Pictures/cover-chto-takoe.jpg', cat:'intro' },
+      { title:'Через сны',            file:'Через сны 720.mp4',            cover:'Pictures/cover-cherez-sny.jpg', cat:'intro' },
+
+      // Практика
+      { title:'Учиться понимать свои сны',                         file:'Учиться понимать свои сны 720.mp4',                     cover:'Pictures/cover-uchitsya-ponyimat.jpg', cat:'practice' },
+      { title:'Учиться понимать свои сны — ЭТО',             file:'Учиться понимать свои сны — ЭТО new 720.mp4',           cover:'Pictures/cover-eto-new.jpg',            cat:'practice' },
+      { title:'Задача Души', file:'Задача Души  ver1 музыки 720.mp4', cover:'Pictures/cover-zadacha-dusha.jpg', cat:'practice' },
+      { title:'Что могут сны',                                     file:'Что могут сны 720.mp4',                                 cover:'Pictures/cover-chto-mogut.jpg',         cat:'practice' },
+
+      // Тёмные
+      { title:'Кошмарные сны',                       file:'кошмарные сны 720.mp4',                    cover:'Pictures/cover-koshmarnye.jpg',      cat:'temnye' },
+      { title:'Вещие сны',                           file:'Вещие сны  720.mp4',                       cover:'Pictures/cover-veshchie.jpg',        cat:'temnye' },
+      { title:'Вещие сны — новый текст ', file:'Вещие сны новый текст  две строки  1080.mp4', cover:'Pictures/cover-veshchie-novyy.jpg',   cat:'temnye' },
+
+      // Позитивные
+      { title:'Повторяющиеся сны', file:'Повторяющиеся сны 720.mp4', cover:'Pictures/cover-povtoryayuschiesya.jpg', cat:'positive' },
+      { title:'Счастливые сны', file:'Счастливые сны вер1. 720.mp4', cover:'Pictures/cover-schastlivye.jpg', cat:'positive' },
+      { title:'Сны — это рассказ о нас', file:'Сны это рассказ о нас 720.mp4', cover:'Pictures/cover-rasskaz-o-nas.jpg', cat:'positive' },
+		{ title:'Dreams — A Story of Us', file:'Dreams — A Story of Us  ver.3 EG,RU,logo.mp4', cover:'Pictures/cover-rasskaz-o-nasus.jpg', cat:'positive' },
+		{ title:'Сны — это рассказ о нас (немецкий)', file:'Сны это рассказ о нас немецкий.mp4 (1).mp4', cover:'Pictures/cover-rasskaz-o-nasde.jpg', cat:'positive' },
+      // Спец
+      { title:'ТВОИ СНЫ ОПРЕДЕЛЯЮТ ТВОЮ СУДЬБУ', file:'hero.mp4', cover:'Pictures/cover-hero.jpg', cat:'special' },
+		{ title:'Уникальный Метод Работы со Сновидениями', file:'Уникальный Метод Работы со Сновидениями.mp4', cover:'Pictures/cover-hero-metod.jpg', cat:'special'}
+		
+    ];
+
+    // ===== хелперы
+    function byId(id){ return document.getElementById(id); }
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function vpath(name){ return 'video/' + encodeURI(name); }
+
+    // ===== рендер табов с бейджами количества
+    (function renderTabs(){
+      var wrap = byId('tabs'); if(!wrap) return;
+      var counts = SONGS.reduce(function(acc,s){ acc[s.cat]=(acc[s.cat]||0)+1; acc.all=(acc.all||0)+1; return acc; }, {});
+      wrap.innerHTML = CATS.map(function(c){
+        var n = counts[c.key] || 0;
+        return '<button class="tab" data-tab="'+c.key+'">'+esc(c.title)+' <span class="badge">'+n+'</span></button>';
+      }).join('');
+    })();
+
+    // ===== рендер карточек c фильтром по категории
+    function renderList(catKey){
+      var box = byId('songsList'); if(!box) return;
+      var list = SONGS.filter(function(s){ return !catKey || catKey==='all' ? true : s.cat===catKey; });
+      box.innerHTML = list.map(function(s, i){
+        var src   = vpath(s.file);
+        var cover = s.cover || '';
+        var coverStyle = cover ? "background-image:url('"+esc(cover)+"')" : '';
+        return (
+          '<div class="song-item glass rounded-xl p-4 border border-white/10 flex flex-col gap-3" data-cat="'+esc(s.cat)+'">'+
+            (cover ? '<div class="bg-img" style="'+coverStyle+'"></div><div class="bg-overlay"></div>' : '')+
+            '<div class="content">'+
+              '<div class="font-semibold">'+esc(s.title)+'</div>'+
+              '<div class="mt-2 flex gap-2 flex-wrap">'+
+                '<button class="play-btn px-3 py-1 rounded bg-fuchsia-600 hover:bg-fuchsia-500 text-sm" '+
+                        'data-file="'+esc(s.file)+'" data-title="'+esc(s.title)+'">Воспроизвести</button>'+
+                '<a class="px-3 py-1 rounded bg-slate-800/60 hover:bg-slate-800 text-sm" href="'+src+'" download>Скачать</a>'+
+              '</div>'+
+            '</div>'+
+          '</div>'
+        );
+      }).join('');
+    }
+
+    // ===== управление табами + hash
+    (function tabsLogic(){
+      var tabs = byId('tabs');
+      function setActive(key){
+        // подсветка
+        tabs.querySelectorAll('.tab').forEach(function(t){
+          t.classList.toggle('active', t.getAttribute('data-tab')===key);
+        });
+        // рендер
+        renderList(key);
+        // сохранить в hash
+        if(location.hash.replace('#','') !== key){
+          history.replaceState(null,'','#'+key);
+        }
+      }
+      // начальный таб из hash или 'all'
+      var initial = location.hash ? location.hash.replace('#','') : 'all';
+      if(!CATS.some(function(c){return c.key===initial;})) initial='all';
+      renderList(initial);
+      // отрисованные табы уже есть — навешиваем события
+      tabs.addEventListener('click', function(e){
+        var btn = e.target.closest && e.target.closest('.tab'); if(!btn) return;
+        setActive(btn.getAttribute('data-tab'));
+      });
+      // проставим active визуально
+      tabs.querySelectorAll('.tab').forEach(function(t){
+        t.classList.toggle('active', t.getAttribute('data-tab')===initial);
+      });
+      // слушаем изменение hash (если пользователь вручную поменял)
+      window.addEventListener('hashchange', function(){
+        var k = location.hash.replace('#','') || 'all';
+        if(!CATS.some(function(c){return c.key===k;})) k='all';
+        setActive(k);
+      });
+    })();
+
+    // ===== модальный плеер
+    (function initPlayer(){
+      var modal = byId('songModal');
+      var player = byId('songPlayer');
+      var now    = byId('nowPlaying');
+      var close  = byId('closeSong');
+      var list   = byId('songsList');
+
+      function open(file, title){
+        player.src = vpath(file);
+        if(now) now.textContent = 'Сейчас играет: ' + title;
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+        player.play().catch(function(){});
+      }
+      function closeModal(){
+        player.pause(); player.currentTime = 0; player.src = '';
+        modal.classList.remove('flex'); modal.classList.add('hidden');
+        if(now) now.textContent = '';
+      }
+
+      // запуск из списка
+      list.addEventListener('click', function(e){
+        var btn = e.target.closest && e.target.closest('.play-btn');
+        if(!btn) return;
+        var file  = btn.getAttribute('data-file') || '';
+        var title = btn.getAttribute('data-title') || '';
+        if(!file){ alert('Файл не указан'); return; }
+        open(file, title);
+      });
+
+      // закрытие: кнопка, конец видео, Esc
+      if(close)  close.addEventListener('click', closeModal);
+      if(player) player.addEventListener('ended', closeModal);
+      document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+    })();
+  </script>
+<div data-include="video-modal-songs.html"></div>
+<script src="app.js"></script>
+
+<!-- Кнопка открытия панели -->
+<button id="openSettings"
+  class="fixed bottom-5 right-5 z-50 rounded-full bg-fuchsia-600 hover:bg-fuchsia-500 shadow-lg px-4 py-3 text-sm font-semibold">
+  Фоны & Прозрачность
+</button>
+
+<!-- Пустая панель: app.js сам подставит внутрь весь контент -->
+<div id="settingsPanel"
+     class="hidden fixed bottom-20 right-5 z-50 w-[420px] rounded-2xl border border-white/15
+            bg-slate-900/70 backdrop-blur p-4">
+</div>
+
+
+</body>
+</html>

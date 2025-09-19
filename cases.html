@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сны Грамота Судьбы — Кейсы</title>
+  <meta name="description" content="Примеры кейсов, где метод снов помогает в карьере, личной жизни и творчестве." />
+  <link rel="icon" href="Pictures/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Сны Грамота Судьбы" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="Кейсы — Сны Грамота Судьбы" />
+  <meta property="og:description" content="Реальные примеры использования метода понимания сновидений." />
+  <meta property="og:url" content="cases.html" />
+  <meta property="og:image" content="Pictures/og-cases.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    section{position:relative}
+    .section-bg{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:1}
+    .nav-link{transition:background-color .2s,color .2s}
+    .nav-link:hover{background-color:rgba(217,70,239,.20);color:#fff}
+    .nav-link.active{background-color:rgba(217,70,239,.28);color:#fff}
+    .case-link{cursor:pointer}
+    .case-link:hover{text-decoration:underline;color:rgb(232 121 249)}
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900">
+
+<header class="sticky top-0 z-40 backdrop-blur bg-slate-900/60 border-b border-white/10">
+  <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+    <a href="index.html" class="font-semibold">Сны Грамота Судьбы</a>
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      <a href="index.html" class="nav-link px-3 py-1 rounded">Главная</a>
+      <a href="method.html" class="nav-link px-3 py-1 rounded">Метод</a>
+      <a href="author.html" class="nav-link px-3 py-1 rounded">Автор</a>
+      <a href="contact.html" class="nav-link px-3 py-1 rounded">Общение</a>
+      <a href="cases.html" class="nav-link px-3 py-1 rounded active">Кейсы</a>
+      <a href="booking.html" class="nav-link px-3 py-1 rounded">Запись</a>
+      <a href="songs.html" class="nav-link px-3 py-1 rounded">Песни</a>
+      <a href="faq.html" class="nav-link px-3 py-1 rounded">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<section id="cases" class="relative mx-auto max-w-7xl px-4 py-16 text-center">
+  <div class="section-bg" style="background-image:url('phon/cases_bg.png');"></div>
+
+  <h1 class="text-3xl font-bold mb-6">Кейсы</h1>
+  <ul class="space-y-4 text-lg">
+    <li class="case-link" data-case="Карьерный выбор — «Мост и город из тумана»">Карьерный выбор — «Мост и город из тумана»</li>
+    <li class="case-link" data-case="Личные границы — «Дом без дверей»">Личные границы — «Дом без дверей»</li>
+    <li class="case-link" data-case="Творческая смелость — «Лунная сцена»">Творческая смелость — «Лунная сцена»</li>
+  </ul>
+</section>
+
+<!-- Модалка заказа курса -->
+<div id="caseModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+  <div class="glass w-[90vw] max-w-lg rounded-xl p-6 relative">
+    <button id="closeCaseModal" class="absolute top-3 right-3 text-slate-200 text-xl">✕</button>
+    <h2 class="text-xl font-bold mb-4">Заказ курса</h2>
+    <p id="selectedCase" class="mb-4 text-slate-300"></p>
+    <form id="caseForm" action="mailto:example@dreams.site" method="POST" enctype="text/plain" class="space-y-3">
+      <input type="text" name="Имя" placeholder="Ваше имя" required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <input type="email" name="Email" placeholder="Ваш email" required class="w-full px-3 py-2 rounded bg-slate-800" />
+      <textarea name="Сообщение" id="caseMessage" placeholder="Ваш запрос" required class="w-full px-3 py-2 rounded bg-slate-800"></textarea>
+      <button type="submit" class="w-full px-4 py-2 bg-fuchsia-600 hover:bg-fuchsia-700 rounded">Отправить на email</button>
+    </form>
+    <div class="mt-4 flex gap-3">
+      <a href="https://wa.me/79991234567" target="_blank" rel="noopener" class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-500 text-center rounded">Написать в WhatsApp</a>
+      <a href="https://t.me/YourTelegramUsername" target="_blank" rel="noopener" class="flex-1 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-center rounded">Написать в Telegram</a>
+    </div>
+  </div>
+</div>
+
+<footer class="mx-auto max-w-7xl px-4 py-6 border-t border-white/10 text-sm text-slate-300/90">
+  © <span id="year"></span> Сны Грамота Судьбы
+</footer>
+
+<script>
+  // год
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // модалка кейсов
+  const caseLinks = document.querySelectorAll('.case-link');
+  const modal = document.getElementById('caseModal');
+  const closeBtn = document.getElementById('closeCaseModal');
+  const selectedCase = document.getElementById('selectedCase');
+  const caseMessage = document.getElementById('caseMessage');
+
+  caseLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const text = link.dataset.case;
+      selectedCase.textContent = "Вы выбрали: " + text;
+      caseMessage.value = "Хочу заказать курс по кейсу: " + text;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  });
+</script>
+
+</body>
+</html>
